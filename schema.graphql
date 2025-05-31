@@ -1,0 +1,49 @@
+type NFT @entity {
+  id: ID!
+  tokenId: BigInt!
+  creator: Bytes!
+  owner: Bytes!
+  tokenURI: String!
+  price: BigInt!
+  isListed: Boolean!
+  createdAt: BigInt!
+  updatedAt: BigInt!
+  sales: [Sale!]! @derivedFrom(field: "nft")
+  transfers: [Transfer!]! @derivedFrom(field: "nft")
+}
+
+type Sale @entity {
+  id: ID!
+  nft: NFT!
+  seller: Bytes!
+  buyer: Bytes!
+  price: BigInt!
+  timestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type Transfer @entity {
+  id: ID!
+  nft: NFT!
+  from: Bytes!
+  to: Bytes!
+  timestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type User @entity {
+  id: ID!
+  address: Bytes!
+  totalNFTsOwned: BigInt!
+  totalNFTsCreated: BigInt!
+  totalSales: BigInt!
+  totalPurchases: BigInt!
+}
+
+type MarketplaceStat @entity {
+  id: ID!
+  totalNFTs: BigInt!
+  totalSales: BigInt!
+  totalVolume: BigInt!
+  averagePrice: BigInt!
+} 

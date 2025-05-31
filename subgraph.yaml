@@ -1,0 +1,33 @@
+specVersion: 0.0.5
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: NFTMarketplace
+    network: sepolia
+    source:
+      address: "0x5aA7f59160081692c8d7e3FC0f8dbD10EA7e2574"
+      abi: NFTMarketplace
+      startBlock: 7266100
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - NFT
+        - Sale
+        - Transfer
+        - User
+      abis:
+        - name: NFTMarketplace
+          file: ./abis/NFTMarketplace.json
+      eventHandlers:
+        - event: NFTMinted(indexed uint256,indexed address,string)
+          handler: handleNFTMinted
+        - event: NFTSold(indexed uint256,indexed address,indexed address,uint256)
+          handler: handleNFTSold
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+        - event: NFTListed(indexed uint256,indexed address,uint256)
+          handler: handleNFTListed
+      file: ./src/mapping.ts 

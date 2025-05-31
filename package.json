@@ -1,0 +1,33 @@
+{
+	"name": "nft-marketplace-subgraph",
+	"version": "1.0.0",
+	"description": "Subgraph for NFT Marketplace",
+	"scripts": {
+		"codegen": "graph codegen",
+		"build": "graph build",
+		"deploy": "graph deploy --studio nft-marketplace",
+		"create-local": "graph create --node http://localhost:8020/ nft-marketplace",
+		"deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 nft-marketplace"
+	},
+	"keywords": [
+		"nft",
+		"marketplace",
+		"thegraph",
+		"ethereum",
+		"subgraph"
+	],
+	"author": "NFT Marketplace Team",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/vung2701/nft-marketplace-subgraph"
+	},
+	"dependencies": {
+		"@graphprotocol/graph-cli": "^0.69.0",
+		"@graphprotocol/graph-ts": "^0.31.0"
+	},
+	"devDependencies": {
+		"ts-node": "10.4.0",
+		"typescript": "4.5.4"
+	}
+}
