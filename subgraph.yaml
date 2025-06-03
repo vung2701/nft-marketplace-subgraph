@@ -14,20 +14,16 @@ dataSources:
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - NFT
-        - Sale
-        - Transfer
+        - Listing
+        - Purchase
         - User
+        - MarketplaceStat
       abis:
         - name: NFTMarketplace
           file: ./abis/NFTMarketplace.json
       eventHandlers:
-        - event: NFTMinted(indexed uint256,indexed address,string)
-          handler: handleNFTMinted
-        - event: NFTSold(indexed uint256,indexed address,indexed address,uint256)
-          handler: handleNFTSold
-        - event: Transfer(indexed address,indexed address,indexed uint256)
-          handler: handleTransfer
-        - event: NFTListed(indexed uint256,indexed address,uint256)
+        - event: NFTListed(indexed address,indexed address,indexed uint256,uint256)
           handler: handleNFTListed
+        - event: NFTBought(indexed address,indexed address,indexed uint256,uint256)
+          handler: handleNFTBought
       file: ./src/mapping.ts 
