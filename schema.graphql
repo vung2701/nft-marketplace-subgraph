@@ -9,6 +9,10 @@ type Listing @entity {
   listedAt: BigInt!
   soldAt: BigInt
   transactionHash: Bytes!
+  tokenURI: String
+  name: String
+  description: String
+  image: String
   purchase: Purchase @derivedFrom(field: "listing")
 }
 

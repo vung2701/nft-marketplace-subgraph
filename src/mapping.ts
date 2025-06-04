@@ -3,7 +3,7 @@ import {
 	NFTBought as NFTBoughtEvent
 } from '../generated/NFTMarketplace/NFTMarketplace'
 import { Listing, Purchase, User, MarketplaceStat } from '../generated/schema'
-import { BigInt, Bytes, store } from '@graphprotocol/graph-ts'
+import { BigInt, Bytes } from '@graphprotocol/graph-ts'
 
 let ZERO_BI = BigInt.fromI32(0)
 let ONE_BI = BigInt.fromI32(1)
@@ -22,6 +22,12 @@ export function handleNFTListed(event: NFTListedEvent): void {
 	listing.isSold = false
 	listing.listedAt = event.block.timestamp
 	listing.transactionHash = event.transaction.hash
+
+	// Set basic NFT info - metadata will be fetched on frontend
+	listing.name = "NFT #" + event.params.tokenId.toString()
+	listing.description = "NFT from collection " + event.params.nftAddress.toHexString().slice(0, 8) + "..."
+	listing.image = "" // Will be populated by frontend
+	listing.tokenURI = "" // Will be populated by frontend if needed
 
 	listing.save()
 
