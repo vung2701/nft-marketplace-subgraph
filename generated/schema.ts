@@ -63,17 +63,17 @@ export class Listing extends Entity {
     this.set("listingId", Value.fromBigInt(value));
   }
 
-  get seller(): Bytes {
+  get seller(): string {
     let value = this.get("seller");
     if (!value || value.kind == ValueKind.NULL) {
       throw new Error("Cannot return null for a required field.");
     } else {
-      return value.toBytes();
+      return value.toString();
     }
   }
 
-  set seller(value: Bytes) {
-    this.set("seller", Value.fromBytes(value));
+  set seller(value: string) {
+    this.set("seller", Value.fromString(value));
   }
 
   get nftAddress(): Bytes {
@@ -171,74 +171,6 @@ export class Listing extends Entity {
     this.set("transactionHash", Value.fromBytes(value));
   }
 
-  get tokenURI(): string | null {
-    let value = this.get("tokenURI");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toString();
-    }
-  }
-
-  set tokenURI(value: string | null) {
-    if (!value) {
-      this.unset("tokenURI");
-    } else {
-      this.set("tokenURI", Value.fromString(<string>value));
-    }
-  }
-
-  get name(): string | null {
-    let value = this.get("name");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toString();
-    }
-  }
-
-  set name(value: string | null) {
-    if (!value) {
-      this.unset("name");
-    } else {
-      this.set("name", Value.fromString(<string>value));
-    }
-  }
-
-  get description(): string | null {
-    let value = this.get("description");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toString();
-    }
-  }
-
-  set description(value: string | null) {
-    if (!value) {
-      this.unset("description");
-    } else {
-      this.set("description", Value.fromString(<string>value));
-    }
-  }
-
-  get image(): string | null {
-    let value = this.get("image");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toString();
-    }
-  }
-
-  set image(value: string | null) {
-    if (!value) {
-      this.unset("image");
-    } else {
-      this.set("image", Value.fromString(<string>value));
-    }
-  }
-
   get purchase(): PurchaseLoader {
     return new PurchaseLoader(
       "Listing",
@@ -304,30 +236,30 @@ export class Purchase extends Entity {
     }
   }
 
-  get buyer(): Bytes {
+  get buyer(): string {
     let value = this.get("buyer");
     if (!value || value.kind == ValueKind.NULL) {
       throw new Error("Cannot return null for a required field.");
     } else {
-      return value.toBytes();
+      return value.toString();
     }
   }
 
-  set buyer(value: Bytes) {
-    this.set("buyer", Value.fromBytes(value));
+  set buyer(value: string) {
+    this.set("buyer", Value.fromString(value));
   }
 
-  get seller(): Bytes {
+  get seller(): string {
     let value = this.get("seller");
     if (!value || value.kind == ValueKind.NULL) {
       throw new Error("Cannot return null for a required field.");
     } else {
-      return value.toBytes();
+      return value.toString();
     }
   }
 
-  set seller(value: Bytes) {
-    this.set("seller", Value.fromBytes(value));
+  set seller(value: string) {
+    this.set("seller", Value.fromString(value));
   }
 
   get nftAddress(): Bytes {
@@ -512,6 +444,162 @@ export class User extends Entity {
   set totalVolumeAsSeller(value: BigInt) {
     this.set("totalVolumeAsSeller", Value.fromBigInt(value));
   }
+
+  get firstActivityAt(): BigInt {
+    let value = this.get("firstActivityAt");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set firstActivityAt(value: BigInt) {
+    this.set("firstActivityAt", Value.fromBigInt(value));
+  }
+
+  get lastActivityAt(): BigInt {
+    let value = this.get("lastActivityAt");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set lastActivityAt(value: BigInt) {
+    this.set("lastActivityAt", Value.fromBigInt(value));
+  }
+
+  get listings(): ListingLoader {
+    return new ListingLoader("User", this.get("id")!.toString(), "listings");
+  }
+
+  get purchases(): PurchaseLoader {
+    return new PurchaseLoader("User", this.get("id")!.toString(), "purchases");
+  }
+
+  get sales(): PurchaseLoader {
+    return new PurchaseLoader("User", this.get("id")!.toString(), "sales");
+  }
+}
+
+export class Collection extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save Collection entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type Collection must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`,
+      );
+      store.set("Collection", id.toString(), this);
+    }
+  }
+
+  static loadInBlock(id: string): Collection | null {
+    return changetype<Collection | null>(store.get_in_block("Collection", id));
+  }
+
+  static load(id: string): Collection | null {
+    return changetype<Collection | null>(store.get("Collection", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get address(): Bytes {
+    let value = this.get("address");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set address(value: Bytes) {
+    this.set("address", Value.fromBytes(value));
+  }
+
+  get totalListings(): BigInt {
+    let value = this.get("totalListings");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set totalListings(value: BigInt) {
+    this.set("totalListings", Value.fromBigInt(value));
+  }
+
+  get totalSales(): BigInt {
+    let value = this.get("totalSales");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set totalSales(value: BigInt) {
+    this.set("totalSales", Value.fromBigInt(value));
+  }
+
+  get totalVolume(): BigInt {
+    let value = this.get("totalVolume");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set totalVolume(value: BigInt) {
+    this.set("totalVolume", Value.fromBigInt(value));
+  }
+
+  get floorPrice(): BigInt {
+    let value = this.get("floorPrice");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set floorPrice(value: BigInt) {
+    this.set("floorPrice", Value.fromBigInt(value));
+  }
+
+  get lastSalePrice(): BigInt {
+    let value = this.get("lastSalePrice");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set lastSalePrice(value: BigInt) {
+    this.set("lastSalePrice", Value.fromBigInt(value));
+  }
 }
 
 export class MarketplaceStat extends Entity {
@@ -568,6 +656,19 @@ export class MarketplaceStat extends Entity {
     this.set("totalListings", Value.fromBigInt(value));
   }
 
+  get totalActiveListings(): BigInt {
+    let value = this.get("totalActiveListings");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set totalActiveListings(value: BigInt) {
+    this.set("totalActiveListings", Value.fromBigInt(value));
+  }
+
   get totalSales(): BigInt {
     let value = this.get("totalSales");
     if (!value || value.kind == ValueKind.NULL) {
@@ -594,19 +695,6 @@ export class MarketplaceStat extends Entity {
     this.set("totalVolume", Value.fromBigInt(value));
   }
 
-  get totalActiveListings(): BigInt {
-    let value = this.get("totalActiveListings");
-    if (!value || value.kind == ValueKind.NULL) {
-      throw new Error("Cannot return null for a required field.");
-    } else {
-      return value.toBigInt();
-    }
-  }
-
-  set totalActiveListings(value: BigInt) {
-    this.set("totalActiveListings", Value.fromBigInt(value));
-  }
-
   get averagePrice(): BigInt {
     let value = this.get("averagePrice");
     if (!value || value.kind == ValueKind.NULL) {
@@ -618,6 +706,32 @@ export class MarketplaceStat extends Entity {
 
   set averagePrice(value: BigInt) {
     this.set("averagePrice", Value.fromBigInt(value));
+  }
+
+  get totalCollections(): BigInt {
+    let value = this.get("totalCollections");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set totalCollections(value: BigInt) {
+    this.set("totalCollections", Value.fromBigInt(value));
+  }
+
+  get totalUsers(): BigInt {
+    let value = this.get("totalUsers");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set totalUsers(value: BigInt) {
+    this.set("totalUsers", Value.fromBigInt(value));
   }
 
   get updatedAt(): BigInt {
@@ -649,5 +763,23 @@ export class PurchaseLoader extends Entity {
   load(): Purchase[] {
     let value = store.loadRelated(this._entity, this._id, this._field);
     return changetype<Purchase[]>(value);
+  }
+}
+
+export class ListingLoader extends Entity {
+  _entity: string;
+  _field: string;
+  _id: string;
+
+  constructor(entity: string, id: string, field: string) {
+    super();
+    this._entity = entity;
+    this._id = id;
+    this._field = field;
+  }
+
+  load(): Listing[] {
+    let value = store.loadRelated(this._entity, this._id, this._field);
+    return changetype<Listing[]>(value);
   }
 }

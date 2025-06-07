@@ -1,7 +1,9 @@
 specVersion: 0.0.5
 schema:
   file: ./schema.graphql
+
 dataSources:
+  # 🎯 NFT Marketplace Contract - Core trading events only
   - kind: ethereum/contract
     name: NFTMarketplace
     network: sepolia
@@ -17,6 +19,7 @@ dataSources:
         - Listing
         - Purchase
         - User
+        - Collection
         - MarketplaceStat
       abis:
         - name: NFTMarketplace
@@ -26,4 +29,14 @@ dataSources:
           handler: handleNFTListed
         - event: NFTBought(indexed address,indexed address,indexed uint256,uint256)
           handler: handleNFTBought
-      file: ./src/mapping.ts 
+      file: ./src/mapping.ts
+
+# 📝 Note: Simplified for core marketplace functionality
+# Advanced analytics and metadata handled separately
+
+# 📝 Note: NFT Collection events removed - handled by Moralis
+# Moralis will provide:
+# - NFT metadata (name, description, image)
+# - Collection info (name, symbol, total supply)
+# - Token ownership data
+# - Real-time NFT data 

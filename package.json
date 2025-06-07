@@ -1,27 +1,50 @@
 {
 	"name": "nft-marketplace-subgraph",
 	"version": "1.0.0",
-	"description": "Subgraph for NFT Marketplace",
+	"description": "Subgraph for NFT Marketplace - Index blockchain data for GraphQL queries",
 	"scripts": {
 		"codegen": "graph codegen",
 		"build": "graph build",
 		"deploy": "graph deploy --studio nft-marketplace",
+		"deploy:version": "graph deploy --studio nft-marketplace --version-label",
 		"create-local": "graph create --node http://localhost:8020/ nft-marketplace",
-		"deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 nft-marketplace"
+		"deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 nft-marketplace",
+		"remove-local": "graph remove --node http://localhost:8020/ nft-marketplace",
+		"auth": "graph auth --studio",
+		"prepare": "chmod +x scripts/*.sh",
+		"update-abis": "./scripts/update-abis.sh",
+		"deploy-dev": "./scripts/deploy.sh development",
+		"deploy-prod": "./scripts/deploy.sh production",
+		"start-local": "docker-compose up -d",
+		"stop-local": "docker-compose down",
+		"logs": "docker-compose logs -f graph-node",
+		"clean": "rm -rf build generated",
+		"test": "npm run codegen && npm run build",
+		"lint": "echo 'No linting configured for AssemblyScript'",
+		"validate": "graph validate"
 	},
 	"keywords": [
 		"nft",
 		"marketplace",
 		"thegraph",
 		"ethereum",
-		"subgraph"
+		"subgraph",
+		"graphql",
+		"blockchain",
+		"web3",
+		"defi",
+		"indexer"
 	],
 	"author": "NFT Marketplace Team",
 	"license": "MIT",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/vung2701/nft-marketplace-subgraph"
+		"url": "https://github.com/your-org/nft-marketplace-subgraph"
 	},
+	"bugs": {
+		"url": "https://github.com/your-org/nft-marketplace-subgraph/issues"
+	},
+	"homepage": "https://github.com/your-org/nft-marketplace-subgraph#readme",
 	"dependencies": {
 		"@graphprotocol/graph-cli": "^0.69.0",
 		"@graphprotocol/graph-ts": "^0.31.0"
@@ -29,5 +52,21 @@
 	"devDependencies": {
 		"ts-node": "10.4.0",
 		"typescript": "4.5.4"
+	},
+	"engines": {
+		"node": ">=16.0.0",
+		"npm": ">=8.0.0"
+	},
+	"files": [
+		"schema.graphql",
+		"subgraph.yaml",
+		"src/",
+		"abis/",
+		"build/",
+		"generated/"
+	],
+	"funding": {
+		"type": "github",
+		"url": "https://github.com/sponsors/your-org"
 	}
 }

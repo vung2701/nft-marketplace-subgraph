@@ -1,49 +1,73 @@
+# ===================================
+# 🎯 NFT Marketplace Subgraph Schema
+# Focus: Core Trading Analytics Only
+# Simplified for essential functionality
+# ===================================
+
+# Core trading entity
 type Listing @entity {
-  id: ID!
-  listingId: BigInt!
-  seller: Bytes!
-  nftAddress: Bytes!
-  tokenId: BigInt!
-  price: BigInt!
-  isSold: Boolean!
-  listedAt: BigInt!
-  soldAt: BigInt
-  transactionHash: Bytes!
-  tokenURI: String
-  name: String
-  description: String
-  image: String
+  id: ID! # transaction-hash-logIndex
+  listingId: BigInt! # On-chain listing ID
+  seller: User! # Seller (User entity)
+  nftAddress: Bytes! # Contract address
+  tokenId: BigInt! # Token ID
+  price: BigInt! # Listing price in Wei
+  isSold: Boolean! # Sale status
+  listedAt: BigInt! # Block timestamp
+  soldAt: BigInt # Sale timestamp (if sold)
+  transactionHash: Bytes! # Transaction hash
   purchase: Purchase @derivedFrom(field: "listing")
 }
 
+# Purchase/Sale tracking
 type Purchase @entity {
-  id: ID!
-  listing: Listing
-  buyer: Bytes!
-  seller: Bytes!
-  nftAddress: Bytes!
-  tokenId: BigInt!
-  price: BigInt!
-  timestamp: BigInt!
-  transactionHash: Bytes!
+  id: ID! # transaction-hash-logIndex
+  listing: Listing # Reference to original listing
+  buyer: User! # Buyer (User entity)
+  seller: User! # Seller (User entity)
+  nftAddress: Bytes! # Contract address
+  tokenId: BigInt! # Token ID
+  price: BigInt! # Sale price in Wei
+  timestamp: BigInt! # Block timestamp
+  transactionHash: Bytes! # Transaction hash
 }
 
+# User trading statistics
 type User @entity {
-  id: ID!
-  address: Bytes!
-  totalListings: BigInt!
-  totalPurchases: BigInt!
-  totalSales: BigInt!
-  totalVolumeAsBuyer: BigInt!
-  totalVolumeAsSeller: BigInt!
+  id: ID! # User address (lowercase)
+  address: Bytes! # User address
+  totalListings: BigInt! # Number of items listed
+  totalPurchases: BigInt! # Number of items bought
+  totalSales: BigInt! # Number of items sold
+  totalVolumeAsBuyer: BigInt! # Total spent (in Wei)
+  totalVolumeAsSeller: BigInt! # Total earned (in Wei)
+  firstActivityAt: BigInt! # First transaction timestamp
+  lastActivityAt: BigInt! # Last transaction timestamp
+  listings: [Listing!]! @derivedFrom(field: "seller")
+  purchases: [Purchase!]! @derivedFrom(field: "buyer")
+  sales: [Purchase!]! @derivedFrom(field: "seller")
 }
 
+# Collection trading statistics (simplified)
+type Collection @entity {
+  id: ID! # Contract address
+  address: Bytes! # Contract address
+  totalListings: BigInt! # Total listings ever
+  totalSales: BigInt! # Total sales count
+  totalVolume: BigInt! # Total volume traded (Wei)
+  floorPrice: BigInt! # Current floor price
+  lastSalePrice: BigInt! # Last sale price
+}
+
+# Global marketplace metrics (simplified)
 type MarketplaceStat @entity {
-  id: ID!
-  totalListings: BigInt!
-  totalSales: BigInt!
-  totalVolume: BigInt!
-  totalActiveListings: BigInt!
-  averagePrice: BigInt!
-  updatedAt: BigInt!
-} 
+  id: ID! # Static: "marketplace-stats"
+  totalListings: BigInt! # All-time listings
+  totalActiveListings: BigInt! # Currently active
+  totalSales: BigInt! # All-time sales
+  totalVolume: BigInt! # All-time volume (Wei)
+  averagePrice: BigInt! # Average sale price
+  totalCollections: BigInt! # Unique collections traded
+  totalUsers: BigInt! # Unique users
+  updatedAt: BigInt! # Last update timestamp
+}
