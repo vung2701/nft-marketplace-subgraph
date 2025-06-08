@@ -1,14 +1,14 @@
 # ===================================
-# 🎯 NFT Marketplace Subgraph Schema
-# Focus: Core Trading Analytics Only
-# Simplified for essential functionality
+# 🚀 NFT Marketplace Analytics Subgraph
+# Focus: Daily, Weekly & All-time Analytics
+# Optimized for Volume & Price History
 # ===================================
 
-# Core trading entity
+# Core trading entity - simplified
 type Listing @entity {
   id: ID! # transaction-hash-logIndex
   listingId: BigInt! # On-chain listing ID
-  seller: User! # Seller (User entity)
+  seller: User! # Seller reference
   nftAddress: Bytes! # Contract address
   tokenId: BigInt! # Token ID
   price: BigInt! # Listing price in Wei
@@ -23,8 +23,8 @@ type Listing @entity {
 type Purchase @entity {
   id: ID! # transaction-hash-logIndex
   listing: Listing # Reference to original listing
-  buyer: User! # Buyer (User entity)
-  seller: User! # Seller (User entity)
+  buyer: User! # Buyer reference
+  seller: User! # Seller reference
   nftAddress: Bytes! # Contract address
   tokenId: BigInt! # Token ID
   price: BigInt! # Sale price in Wei
@@ -32,41 +32,150 @@ type Purchase @entity {
   transactionHash: Bytes! # Transaction hash
 }
 
-# User trading statistics
+# User analytics - focused on trading behavior
 type User @entity {
   id: ID! # User address (lowercase)
   address: Bytes! # User address
+  
+  # Core stats
   totalListings: BigInt! # Number of items listed
   totalPurchases: BigInt! # Number of items bought
   totalSales: BigInt! # Number of items sold
   totalVolumeAsBuyer: BigInt! # Total spent (in Wei)
   totalVolumeAsSeller: BigInt! # Total earned (in Wei)
+  
+  # Time tracking
   firstActivityAt: BigInt! # First transaction timestamp
   lastActivityAt: BigInt! # Last transaction timestamp
+  
+  # Derived relationships
   listings: [Listing!]! @derivedFrom(field: "seller")
   purchases: [Purchase!]! @derivedFrom(field: "buyer")
   sales: [Purchase!]! @derivedFrom(field: "seller")
 }
 
-# Collection trading statistics (simplified)
+# Collection analytics - comprehensive metrics
 type Collection @entity {
   id: ID! # Contract address
   address: Bytes! # Contract address
+  
+  # Core stats
   totalListings: BigInt! # Total listings ever
   totalSales: BigInt! # Total sales count
   totalVolume: BigInt! # Total volume traded (Wei)
+  
+  # Price analytics
   floorPrice: BigInt! # Current floor price
-  lastSalePrice: BigInt! # Last sale price
+  ceilingPrice: BigInt! # Highest price ever
+  averagePrice: BigInt! # Average sale price
+  lastSalePrice: BigInt! # Most recent sale price
+  
+  # Price history reference
+  dayData: [CollectionDayData!]! @derivedFrom(field: "collection")
+  weekData: [CollectionWeekData!]! @derivedFrom(field: "collection")
 }
 
+# Daily aggregated data for collections
+type CollectionDayData @entity {
+  id: ID! # collection-address-day-timestamp
+  collection: Collection! # Collection reference
+  date: BigInt! # Day timestamp (start of day)
+  
+  # Daily metrics
+  dailyVolume: BigInt! # Volume traded in this day
+  dailySales: BigInt! # Number of sales
+  dailyListings: BigInt! # Number of new listings
+  
+  # Price metrics
+  openPrice: BigInt! # First sale price of the day
+  closePrice: BigInt! # Last sale price of the day
+  highPrice: BigInt! # Highest sale price
+  lowPrice: BigInt! # Lowest sale price
+  avgSalePrice: BigInt! # Average sale price
+}
+
+# Weekly aggregated data for collections
+type CollectionWeekData @entity {
+  id: ID! # collection-address-week-timestamp
+  collection: Collection! # Collection reference
+  week: BigInt! # Week timestamp (start of week)
+  
+  # Weekly metrics
+  weeklyVolume: BigInt! # Volume traded in this week
+  weeklySales: BigInt! # Number of sales
+  weeklyListings: BigInt! # Number of new listings
+  
+  # Price metrics
+  openPrice: BigInt! # First sale price of the week
+  closePrice: BigInt! # Last sale price of the week
+  highPrice: BigInt! # Highest sale price
+  lowPrice: BigInt! # Lowest sale price
+  avgSalePrice: BigInt! # Average sale price
+  
+  # Weekly change metrics
+  volumeChange: BigInt! # Volume change from previous week
+  priceChange: BigInt! # Price change from previous week
+}
+
+# Marketplace global analytics
 type MarketplaceStat @entity {
   id: ID! # Static: "marketplace-stats"
+  
+  # Core metrics
   totalListings: BigInt! # All-time listings
   totalActiveListings: BigInt! # Currently active
   totalSales: BigInt! # All-time sales
   totalVolume: BigInt! # All-time volume (Wei)
+  
+  # Analytics
   averagePrice: BigInt! # Average sale price
-  totalCollections: BigInt! # Unique collections traded
+  totalCollections: BigInt! # Unique collections
   totalUsers: BigInt! # Unique users
+  
+  # Time tracking
   updatedAt: BigInt! # Last update timestamp
+  
+  # Historical data
+  dayData: [MarketplaceDayData!]! @derivedFrom(field: "marketplace")
+  weekData: [MarketplaceWeekData!]! @derivedFrom(field: "marketplace")
+}
+
+# Daily marketplace metrics
+type MarketplaceDayData @entity {
+  id: ID! # marketplace-day-timestamp
+  marketplace: MarketplaceStat! # Marketplace reference
+  date: BigInt! # Day timestamp
+  
+  # Daily totals
+  dailyVolume: BigInt! # Total volume
+  dailySales: BigInt! # Total sales
+  dailyListings: BigInt! # New listings
+  dailyActiveUsers: BigInt! # Unique active users
+  
+  # Price metrics
+  avgSalePrice: BigInt! # Average sale price
+  
+  # Daily change metrics
+  volumeChange: BigInt! # Volume change from previous day
+  salesChange: BigInt! # Sales change from previous day
+}
+
+# Weekly marketplace metrics
+type MarketplaceWeekData @entity {
+  id: ID! # marketplace-week-timestamp
+  marketplace: MarketplaceStat! # Marketplace reference
+  week: BigInt! # Week timestamp
+  
+  # Weekly totals
+  weeklyVolume: BigInt! # Total volume
+  weeklySales: BigInt! # Total sales
+  weeklyListings: BigInt! # New listings
+  weeklyActiveUsers: BigInt! # Unique active users
+  
+  # Price metrics
+  avgSalePrice: BigInt! # Average sale price
+  
+  # Weekly change metrics
+  volumeChange: BigInt! # Volume change from previous week
+  salesChange: BigInt! # Sales change from previous week
 }

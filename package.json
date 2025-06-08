@@ -1,49 +1,27 @@
 {
-	"name": "nft-marketplace-subgraph",
+	"name": "nft-marketplace-analytics-subgraph",
 	"version": "1.0.0",
-	"description": "Subgraph for NFT Marketplace - Index blockchain data for GraphQL queries",
+	"description": "NFT Marketplace Analytics Subgraph - Daily, Weekly & All-time Analytics",
 	"scripts": {
 		"codegen": "graph codegen",
 		"build": "graph build",
-		"deploy": "graph deploy --studio nft-marketplace",
-		"deploy:version": "graph deploy --studio nft-marketplace --version-label",
-		"create-local": "graph create --node http://localhost:8020/ nft-marketplace",
-		"deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 nft-marketplace",
-		"remove-local": "graph remove --node http://localhost:8020/ nft-marketplace",
-		"auth": "graph auth --studio"
+		"deploy": "graph deploy --studio nft-marketplace"
 	},
 	"keywords": [
 		"nft",
 		"marketplace",
-		"thegraph",
-		"ethereum",
+		"analytics",
 		"subgraph",
-		"graphql",
-		"blockchain",
-		"web3",
-		"defi",
-		"indexer"
+		"volume",
+		"price-history"
 	],
-	"author": "vung2701",
+	"author": "NFT Marketplace Team",
 	"license": "MIT",
 	"dependencies": {
-		"@graphprotocol/graph-cli": "^0.69.0",
-		"@graphprotocol/graph-ts": "^0.31.0"
-	},
-	"devDependencies": {
-		"ts-node": "10.4.0",
-		"typescript": "4.5.4"
+		"@graphprotocol/graph-cli": "0.47.0",
+		"@graphprotocol/graph-ts": "0.29.3"
 	},
 	"engines": {
-		"node": ">=16.0.0",
-		"npm": ">=8.0.0"
-	},
-	"files": [
-		"schema.graphql",
-		"subgraph.yaml",
-		"src/",
-		"abis/",
-		"build/",
-		"generated/"
-	]
+		"node": ">=16.0.0"
+	}
 }
