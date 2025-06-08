@@ -10,18 +10,7 @@
 		"create-local": "graph create --node http://localhost:8020/ nft-marketplace",
 		"deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 nft-marketplace",
 		"remove-local": "graph remove --node http://localhost:8020/ nft-marketplace",
-		"auth": "graph auth --studio",
-		"prepare": "chmod +x scripts/*.sh",
-		"update-abis": "./scripts/update-abis.sh",
-		"deploy-dev": "./scripts/deploy.sh development",
-		"deploy-prod": "./scripts/deploy.sh production",
-		"start-local": "docker-compose up -d",
-		"stop-local": "docker-compose down",
-		"logs": "docker-compose logs -f graph-node",
-		"clean": "rm -rf build generated",
-		"test": "npm run codegen && npm run build",
-		"lint": "echo 'No linting configured for AssemblyScript'",
-		"validate": "graph validate"
+		"auth": "graph auth --studio"
 	},
 	"keywords": [
 		"nft",
@@ -35,16 +24,8 @@
 		"defi",
 		"indexer"
 	],
-	"author": "NFT Marketplace Team",
+	"author": "vung2701",
 	"license": "MIT",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/your-org/nft-marketplace-subgraph"
-	},
-	"bugs": {
-		"url": "https://github.com/your-org/nft-marketplace-subgraph/issues"
-	},
-	"homepage": "https://github.com/your-org/nft-marketplace-subgraph#readme",
 	"dependencies": {
 		"@graphprotocol/graph-cli": "^0.69.0",
 		"@graphprotocol/graph-ts": "^0.31.0"
@@ -64,9 +45,5 @@
 		"abis/",
 		"build/",
 		"generated/"
-	],
-	"funding": {
-		"type": "github",
-		"url": "https://github.com/sponsors/your-org"
-	}
+	]
 }

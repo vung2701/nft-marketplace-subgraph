@@ -59,7 +59,6 @@ type Collection @entity {
   lastSalePrice: BigInt! # Last sale price
 }
 
-# Global marketplace metrics (simplified)
 type MarketplaceStat @entity {
   id: ID! # Static: "marketplace-stats"
   totalListings: BigInt! # All-time listings

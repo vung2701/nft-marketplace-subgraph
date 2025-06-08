@@ -34,8 +34,6 @@ export function handleTransfer(event: TransferEvent): void {
 			if (tokenURIResult.value.startsWith("data:application/json;base64,")) {
 				// Handle base64 encoded JSON
 				let base64Data = tokenURIResult.value.substring(29) // Remove "data:application/json;base64," prefix
-				// Note: AssemblyScript doesn't have built-in base64 decoding
-				// For production, you might want to use a library or handle this differently
 				nft.name = "NFT #" + event.params.tokenId.toString()
 				nft.description = "NFT from collection " + event.address.toHexString()
 				nft.image = ""
